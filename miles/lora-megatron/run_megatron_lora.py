@@ -103,6 +103,7 @@ def execute():
         "--colocate "
         # "--offload-rollout-level kv_cache weight " # - from fsdp, not supported
         # "--train-backend fsdp " # - from fsdp, use megatron
+        "--train-backend megatron" # + from fsdp, use megatron
         "--attention-dropout 0.0 " # + from fsdp, default dropout in megatron is 0.1
         "--hidden-dropout 0.0 " # + from fsdp, default dropout in megatron is 0.1
         "--accumulate-allreduce-grads-in-tF" # + from fsdp, perf
