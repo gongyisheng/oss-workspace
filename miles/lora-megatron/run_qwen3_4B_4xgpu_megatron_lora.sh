@@ -35,7 +35,7 @@ source /root/miles/scripts/models/qwen3-4B.sh
 CKPT_ARGS=(
    --hf-checkpoint /root/models/Qwen3-4B
    --save /root/models/Qwen3-4B-lora-ckpt
-   --save-interval 10
+   --save-interval 100
 )
 
 LORA_ARGS=(
@@ -53,7 +53,7 @@ ROLLOUT_ARGS=(
    --rollout-shuffle
    --balance-data
    --rm-type deepscaler
-   --num-rollout 60
+   --num-rollout 1000
    --rollout-batch-size 16
    --n-samples-per-prompt 8
    --rollout-max-response-len 2048
@@ -120,14 +120,18 @@ MEGATRON_ARGS=(
    --train-env-vars '{"PYTORCH_CUDA_ALLOC_CONF":"expandable_segments:True"}' # +fsdp, otherwise OOM
 )
 
+PERF_ARGS=(
+   --sequence-parallel # +fsdp
+   --use-dynamic-batch-size # +fsdpF
+   --max-tokens-per-gpu 9216 # +fsdp, perf
+)
+
 MISC_ARGS=(
    --actor-num-nodes 1
    --actor-num-gpus-per-node ${NUM_GPUS}
    --colocate
    --calculate-per-token-loss # +fsdp
    --use-miles-router # +fsdp
-   --use-dynamic-batch-size # +fsdp, perf
-   --max-tokens-per-gpu 9216 # +fsdp, perf
 )
 
 # launch the master node of ray in container
