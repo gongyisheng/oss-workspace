@@ -88,7 +88,8 @@ def execute():
         "--adam-beta2 0.98 "
     )
 
-    sglang_args = "--rollout-num-gpus-per-engine 2 " "--sglang-decode-log-interval 1000 " "--sglang-enable-metrics "
+    # + from fsdp: --sglang-attention-backend flashinfer
+    sglang_args = "--rollout-num-gpus-per-engine 2 " "--sglang-decode-log-interval 1000 " "--sglang-enable-metrics --sglang-attention-backend flashinfer"
 
     megatron_args = (
         "--no-offload-train "
@@ -100,8 +101,13 @@ def execute():
         "--actor-num-nodes 1 "
         "--actor-num-gpus-per-node 4 "
         "--colocate "
-        "--offload-rollout-level kv_cache weight "
-        "--train-backend fsdp "
+        # "--offload-rollout-level kv_cache weight " # - from fsdp
+        # "--train-backend fsdp " # - from fsdp
+        "--attention-dropout 0.0 " # + from fsdp
+        "--hidden-dropout 0.0 " # + from fsdp
+        "--accumulate-allreduce-grads-in-tF" # + from fsdp
+        "--attention-softmax-in-fp32" # + from fsdp
+        "--attention-backend flash" # + from fsdp
     )
 
     train_args = (
