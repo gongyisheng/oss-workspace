@@ -101,7 +101,7 @@ SGLANG_ARGS=(
    --rollout-num-gpus-per-engine 2
    --sglang-decode-log-interval 1000
    # --sglang-enable-metrics # -fsdp
-   --sglang-mem-fraction-static 0.2 # +fsdp, memory usage on H200 = 140*0.2=28GB per GPU
+   --sglang-mem-fraction-static 0.4 # +fsdp, memory usage on H200 = 140*0.4=56GB per GPU
    --sglang-attention-backend flashinfer  # +fsdp
 )
 
