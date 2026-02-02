@@ -117,6 +117,7 @@ MEGATRON_ARGS=(
    --accumulate-allreduce-grads-in-fp32  # +fsdp, megatron specific
    --attention-softmax-in-fp32  # +fsdp, megatron specific
    --attention-backend flash  # +fsdp, megatron specific
+   --train-env-vars '{"PYTORCH_CUDA_ALLOC_CONF":"expandable_segments:True"}' # +fsdp, otherwise OOM
 )
 
 MISC_ARGS=(
