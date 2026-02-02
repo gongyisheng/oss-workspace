@@ -1,6 +1,6 @@
 # miles - lora megatron dev
 
-# env
+## env
 ssh radixark02
 ```
 # use specific GPUs (e.g., GPU 0,1,2)
@@ -29,4 +29,11 @@ pip install -e . --no-deps --no-build-isolation
 pip install megatron-energon --no-deps
 pip install multi-storage-client --no-deps
 cd ..
+```
+
+## model and dataset
+```
+export MODEL_NAME=Qwen3-4B
+mkdir -p /root/models /root/datasets
+hf download Qwen/{MODEL_NAME} --local-dir /root/models/{MODEL_NAME}
 ```
