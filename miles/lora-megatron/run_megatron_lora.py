@@ -101,13 +101,13 @@ def execute():
         "--actor-num-nodes 1 "
         "--actor-num-gpus-per-node 4 "
         "--colocate "
-        # "--offload-rollout-level kv_cache weight " # - from fsdp
-        # "--train-backend fsdp " # - from fsdp
-        "--attention-dropout 0.0 " # + from fsdp
-        "--hidden-dropout 0.0 " # + from fsdp
-        "--accumulate-allreduce-grads-in-tF" # + from fsdp
-        "--attention-softmax-in-fp32" # + from fsdp
-        "--attention-backend flash" # + from fsdp
+        # "--offload-rollout-level kv_cache weight " # - from fsdp, not supported
+        # "--train-backend fsdp " # - from fsdp, use megatron
+        "--attention-dropout 0.0 " # + from fsdp, default dropout in megatron is 0.1
+        "--hidden-dropout 0.0 " # + from fsdp, default dropout in megatron is 0.1
+        "--accumulate-allreduce-grads-in-tF" # + from fsdp, perf
+        "--attention-softmax-in-fp32" # + from fsdp, perf
+        "--attention-backend flash" # + from fsdp, perf
     )
 
     train_args = (
