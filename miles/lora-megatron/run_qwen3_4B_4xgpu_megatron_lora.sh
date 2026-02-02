@@ -100,7 +100,7 @@ WANDB_ARGS=(
 SGLANG_ARGS=(
    --rollout-num-gpus-per-engine 2
    --sglang-decode-log-interval 1000
-   --sglang-enable-metrics
+   # --sglang-enable-metrics # -fsdp
    --sglang-attention-backend flashinfer  # +fsdp
 )
 
