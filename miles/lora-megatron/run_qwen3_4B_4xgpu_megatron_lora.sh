@@ -42,6 +42,7 @@ LORA_ARGS=(
    --lora-dropout 0.0  # +fsdp
    --target-modules all-linear
    --save /root/models/Qwen3-4B-lora-ckpt
+   --save-interval 10
 )
 
 ROLLOUT_ARGS=(
