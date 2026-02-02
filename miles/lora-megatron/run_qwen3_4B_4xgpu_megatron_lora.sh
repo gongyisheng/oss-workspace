@@ -158,3 +158,20 @@ ray job submit --address="http://127.0.0.1:8265" \
    "${MEGATRON_ARGS[@]}" \
    "${MISC_ARGS[@]}"
 
+
+# TODO
+# 1. GET /engine_metrics HTTP/1.1 404 Not Found error when enable sglang metrics
+# 2. GET /engine_metrics HTTP/1.1 500 Internal Server Error 500 error
+# (RolloutManager pid=211899)   File "/usr/local/lib/python3.12/dist-packages/fastapi/routing.py", line 355, in app
+# (RolloutManager pid=211899)     raw_response = await run_endpoint_function(
+# (RolloutManager pid=211899)                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# (RolloutManager pid=211899)   File "/usr/local/lib/python3.12/dist-packages/fastapi/routing.py", line 243, in run_endpoint_function
+# (RolloutManager pid=211899)     return await dependant.call(**values)
+# (RolloutManager pid=211899)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# (RolloutManager pid=211899)   File "/root/miles/miles/router/router.py", line 134, in proxy
+# (RolloutManager pid=211899)     worker_url = self._use_url()
+# (RolloutManager pid=211899)                  ^^^^^^^^^^^^^^^
+# (RolloutManager pid=211899)   File "/root/miles/miles/router/router.py", line 227, in _use_url
+# (RolloutManager pid=211899)     url = min(self.worker_request_counts, key=self.worker_request_counts.get)
+# (RolloutManager pid=211899)           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# (RolloutManager pid=211899) ValueError: min() iterable argument is empty
