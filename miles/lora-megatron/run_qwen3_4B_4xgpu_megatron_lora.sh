@@ -177,7 +177,11 @@ ray job submit --address="http://127.0.0.1:8265" \
 # (RolloutManager pid=211899)           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # (RolloutManager pid=211899) ValueError: min() iterable argument is empty
 
-# 3. exception:            
+# 3. cudnn exception during forward (after rollout generation)
+# work around: 
+# pip list | grep cudnn
+# pip uninstall the-thing-showed     
+# ref: https://github.com/nvidia/megatron-lm/issues/1882
 # ray::MegatronTrainRayActor.train() (pid=212283, ip=172.17.0.50, actor_id=5315cf13034d76675d7d459e02000000,                                      
 # repr=<miles.backends.megatron_utils.actor.MegatronTrainRayActor object at 0x7f50c2a616d0>)                                                      
 #             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                 
