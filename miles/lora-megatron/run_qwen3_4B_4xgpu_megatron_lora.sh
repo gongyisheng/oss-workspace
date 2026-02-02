@@ -90,17 +90,12 @@ OPTIMIZER_ARGS=(
    --adam-beta2 0.98
 )
 
-if [ -z "${WANDB_API_KEY}" ]; then
-   WANDB_ARGS=()
-else
-   WANDB_ARGS=(
-      --use-wandb
-      --wandb-project miles-lora-test
-      --wandb-group qwen3-4B-megatron-lora-dapo-lr2e-5
-      --wandb-key "${WANDB_API_KEY}"
-      --disable-wandb-random-suffix
-   )
-fi
+WANDB_ARGS=(
+   --use-wandb
+   --wandb-project miles-lora-test
+   --wandb-group qwen3-4B-megatron-lora-dapo-lr2e-5
+   --disable-wandb-random-suffix
+)
 
 SGLANG_ARGS=(
    --rollout-num-gpus-per-engine 2
