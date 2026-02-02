@@ -34,6 +34,8 @@ source /root/miles/scripts/models/qwen3-4B.sh
 
 CKPT_ARGS=(
    --hf-checkpoint /root/models/Qwen3-4B
+   --save /root/models/Qwen3-4B-lora-ckpt
+   --save-interval 10
 )
 
 LORA_ARGS=(
@@ -41,8 +43,6 @@ LORA_ARGS=(
    --lora-alpha 32
    --lora-dropout 0.0  # +fsdp
    --target-modules all-linear
-   --save /root/models/Qwen3-4B-lora-ckpt
-   --save-interval 10
 )
 
 ROLLOUT_ARGS=(
