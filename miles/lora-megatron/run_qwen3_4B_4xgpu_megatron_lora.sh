@@ -30,6 +30,7 @@ echo "HAS_NVLINK: $HAS_NVLINK (detected $NVLINK_COUNT NVLink references)"
 
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+source /root/portable-test/miles/lora-megatron/qwen3-4b.sh
 
 CKPT_ARGS=(
    --hf-checkpoint /root/models/Qwen3-4B
