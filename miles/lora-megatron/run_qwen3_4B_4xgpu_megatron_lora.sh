@@ -117,10 +117,12 @@ MEGATRON_ARGS=(
    --accumulate-allreduce-grads-in-fp32  # +fsdp, megatron specific
    --attention-softmax-in-fp32  # +fsdp, megatron specific
    --attention-backend flash  # +fsdp, megatron specific
+   --attn-implementation flash_attention_3 # +fsdp
    --train-env-vars '{"PYTORCH_CUDA_ALLOC_CONF":"expandable_segments:True"}' # +fsdp, otherwise OOM
 )
 
 PERF_ARGS=(
+   --gradient-checkpointing # +fsdp
    --sequence-parallel # +fsdp
    --use-dynamic-batch-size # +fsdpF
    --max-tokens-per-gpu 9216 # +fsdp, perf
