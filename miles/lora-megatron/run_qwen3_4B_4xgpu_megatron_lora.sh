@@ -39,7 +39,7 @@ CKPT_ARGS=(
 )
 
 LORA_ARGS=(
-   --lora-rank 32
+   --lora-rank 64
    --lora-alpha 32
    --lora-dropout 0.0  # +fsdp
    --target-modules all-linear
@@ -53,22 +53,22 @@ ROLLOUT_ARGS=(
    --rollout-shuffle
    --balance-data
    --rm-type deepscaler
-   --num-rollout 50
-   --rollout-batch-size 16
+   --num-rollout 100 
+   --rollout-batch-size 8
    --n-samples-per-prompt 8
-   --rollout-max-response-len 2048
+   --rollout-max-response-len 4096
    --rollout-temperature 1
-   --over-sampling-batch-size 64
-   --dynamic-sampling-filter-path miles.rollout.filter_hub.dynamic_sampling_filters.check_reward_nonzero_std
-   --global-batch-size 128
+   # --over-sampling-batch-size 64
+   # --dynamic-sampling-filter-path miles.rollout.filter_hub.dynamic_sampling_filters.check_reward_nonzero_std
+   --global-batch-size 64
 )
 
 EVAL_ARGS=(
    --eval-interval 5
    --eval-prompt-data aime24 /root/datasets/aime-2024/aime-2024.jsonl
-   --n-samples-per-eval-prompt 2
+   --n-samples-per-eval-prompt 16
    --eval-max-response-len 16384
-   --eval-top-k 1
+   --eval-top-p 1
 )
 
 GRPO_ARGS=(
@@ -98,11 +98,12 @@ WANDB_ARGS=(
 )
 
 SGLANG_ARGS=(
-   --rollout-num-gpus-per-engine 2
+   --rollout-num-gpus-per-engine 1
    --sglang-decode-log-interval 1000
    # --sglang-enable-metrics # -fsdp
-   --sglang-mem-fraction-static 0.4 # +fsdp, memory usage on H200 = 140*0.4=56GB per GPU
-   --sglang-attention-backend flashinfer  # +fsdp
+   --sglang-mem-fraction-static 0.75 # +fsdp, memory usage on H200 = 140*0.4=56GB per GPU
+   --sglang-attention-backend fa3  # +fsdp
+   --sglang-chunked-prefill-size 4096
 )
 
 MEGATRON_ARGS=(
