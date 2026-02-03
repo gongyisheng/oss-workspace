@@ -64,7 +64,7 @@ ROLLOUT_ARGS=(
 )
 
 EVAL_ARGS=(
-   --eval-interval 5
+   --eval-interval 20
    --eval-prompt-data aime24 /root/datasets/aime-2024/aime-2024.jsonl
    --n-samples-per-eval-prompt 16
    --eval-max-response-len 16384
@@ -83,7 +83,7 @@ GRPO_ARGS=(
 
 OPTIMIZER_ARGS=(
    --optimizer adam
-   --lr 2e-5
+   --lr 1e-5
    --lr-decay-style constant
    --weight-decay 0.1
    --adam-beta1 0.9
@@ -93,7 +93,7 @@ OPTIMIZER_ARGS=(
 WANDB_ARGS=(
    --use-wandb
    --wandb-project miles-lora-test
-   --wandb-group qwen3-4B-megatron-lora-dapo-lr2e-5
+   --wandb-group qwen3-4B-megatron-lora-dapo-lr1e-5
    --disable-wandb-random-suffix
 )
 
@@ -101,7 +101,7 @@ SGLANG_ARGS=(
    --rollout-num-gpus-per-engine 1
    --sglang-decode-log-interval 1000
    # --sglang-enable-metrics # -fsdp
-   --sglang-mem-fraction-static 0.75 # +fsdp, memory usage on H200 = 140*0.4=56GB per GPU
+   --sglang-mem-fraction-static 0.4 # +fsdp, memory usage on H200 = 140*0.4=56GB per GPU
    --sglang-attention-backend fa3  # +fsdp
    --sglang-chunked-prefill-size 4096
 )
