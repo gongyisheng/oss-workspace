@@ -35,7 +35,7 @@ source /root/miles/scripts/models/qwen3-4B.sh
 CKPT_ARGS=(
    --hf-checkpoint /root/models/Qwen3-4B
    --save /root/models/Qwen3-4B-lora-ckpt
-   --save-interval 100
+   --save-interval 50
 )
 
 LORA_ARGS=(
