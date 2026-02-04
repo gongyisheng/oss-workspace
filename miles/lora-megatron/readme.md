@@ -36,6 +36,11 @@ pip install flashinfer-jit-cache==0.6.2 --index-url https://flashinfer.ai/whl/cu
 
 ## model and dataset
 ```
+# for dev
+huggingface-cli download --repo-type dataset zhuzilin/gsm8k --local-dir /root/gsm8k
+huggingface-cli download Qwen/Qwen2.5-0.5B-Instruct --local-dir /root/Qwen2.5-0.5B-Instruct
+
+# for benchmark
 export MODEL_NAME=Qwen3-4B
 mkdir -p /root/models /root/datasets
 hf download Qwen/{MODEL_NAME} --local-dir /root/models/{MODEL_NAME}
