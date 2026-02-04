@@ -181,3 +181,5 @@ CUDA kernel errors might be asynchronously reported at some other API call, so t
 For debugging consider passing CUDA_LAUNCH_BLOCKING=1
 Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
 ```
+
+in our current code, megatron bridge export model requires tensor on GPU, so if torch_memory_saver is not wake up, tensors are on cpu and will cause the error above (cannot access base model tensor)
