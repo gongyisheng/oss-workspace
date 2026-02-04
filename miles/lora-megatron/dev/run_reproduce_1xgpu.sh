@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# run: nohup bash examples/reproducibility/dev.sh 2>&1 &
+
 # Debug this:
 #   "--offload-rollout-level kv_cache weight "
 
