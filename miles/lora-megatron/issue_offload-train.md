@@ -120,6 +120,7 @@ Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
 
 possible ways to solve is ugly:
 - .detach().clone()
+- .cpu()
 
 if we do not wake up torch memory saver, we will meet following error:
 
