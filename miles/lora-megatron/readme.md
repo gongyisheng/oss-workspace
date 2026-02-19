@@ -35,6 +35,10 @@ pip install flashinfer-jit-cache==0.6.2 --index-url https://flashinfer.ai/whl/cu
 
 pip list | grep cudnn
 pip uninstall the-thing-showed    
+
+wandb login
+# radixark-03
+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
 ```
 
 ## model and dataset
