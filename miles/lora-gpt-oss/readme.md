@@ -26,3 +26,9 @@ pip install megatron-energon --no-deps
 pip install multi-storage-client --no-deps
 cd ..
 ```
+
+## model and dataset
+```
+huggingface-cli download --repo-type dataset zhuzilin/dapo-math-17k --local-dir /root/dapo-math-17k
+huggingface-cli download openai/gpt-oss-20b --local-dir /root/gpt-oss-20b
+```
