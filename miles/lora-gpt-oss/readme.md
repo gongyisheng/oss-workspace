@@ -33,5 +33,6 @@ pip install flashinfer-jit-cache==0.6.3 --index-url https://flashinfer.ai/whl/cu
 ## model and dataset
 ```
 huggingface-cli download --repo-type dataset zhuzilin/dapo-math-17k --local-dir /root/dapo-math-17k
+huggingface-cli download --repo-type dataset zhuzilin/gsm8k --local-dir /root/gsm8k
 huggingface-cli download openai/gpt-oss-20b --local-dir /root/gpt-oss-20b
 ```
