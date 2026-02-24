@@ -25,6 +25,9 @@ pip install -e . --no-deps --no-build-isolation
 pip install megatron-energon --no-deps
 pip install multi-storage-client --no-deps
 cd ..
+
+# install misc dep
+pip install flashinfer-jit-cache==0.6.3 --index-url https://flashinfer.ai/whl/cu129
 ```
 
 ## model and dataset
