@@ -15,7 +15,7 @@ export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0}
 
 # Load model architecture config
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-source "${SCRIPT_DIR}/models/gpt-oss-20B.sh"
+source "${SCRIPT_DIR}/../../scripts/models/gpt-oss-20b.sh"
 
 CKPT_ARGS=(
    --hf-checkpoint /root/gpt-oss-20b
