@@ -4,8 +4,8 @@ env: https://github.com/sgl-project/sglang/pull/14105, latest commit
 added `--sglang-lora-backend triton` in miles side
 
 # qwen3-30b-a3b
-set target modules to 
 
+lora generation: set target modules to 
 ```
 target_modules=[
     "q_proj", 
@@ -17,7 +17,7 @@ target_modules=[
 ]
 ```
 
-get error:  
+run sglang and get error:  
 
 ```
 [2026-02-27 09:44:04] Scheduler hit an exception: Traceback (most recent call last):
@@ -79,7 +79,7 @@ model.layers.23.mlp.experts.down_proj_bias                                      
 ```
 during lora init, we need to convert batched params to nn.Linear so `peft` can find them by name
 
-error: 
+run sglang and get error: 
 ```
 (SGLangEngine pid=206831) [2026-02-26 12:02:18] Using triton as backend of LoRA kernels.
 (SGLangEngine pid=206831) [2026-02-26 12:02:18] Scheduler hit an exception: Traceback (most recent call last):
@@ -128,7 +128,7 @@ error:
 
 root cause: 
 1. When the server starts with GPT-OSS model (non-Blackwell GPU, triton_kernels installed, no CLI --quantization), check_and_update_args auto-selects moe_runner_backend = "triton_kernel"
-2. Mxfp4MoEMethod.process_weights_after_loading then runs the use_triton_kernels=True path (lines 674-703), which permanently deletes layer.w13_weight and stores it in self.w13_weight_triton_tensor
+2. Mxfp4MoEMethod.process_weights_after_loading then runs the use_triton_kernels=True path, which permanently deletes layer.w13_weight and stores it in self.w13_weight_triton_tensor
 3. FusedMoEWithLoRA.__init__ tries base_layer.w13_weight → AttributeError
 
 fix: 
@@ -152,7 +152,7 @@ sglang/python/sglang/srt/server_args.py
 +        )
 ```
 
-Then we will get error: 
+Then we will get error when run sglang: 
 
 ```
 [2026-02-27 11:18:34] Scheduler hit an exception: Traceback (most recent call last):
