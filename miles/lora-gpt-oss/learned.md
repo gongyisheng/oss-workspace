@@ -8,9 +8,9 @@ must add `--sglang-lora-backend triton` in dev script
 
 ## moe lora target modules
 
-- "all-linear" adds lora to gate
-- sglang currently do not support add lora to gate
-- any attempt to add lora layer to gate will cause following error:
+- "all-linear" adds lora to router
+- sglang currently do not support add lora to router
+- any attempt to add lora to router will cause following error:
 
 ```
 [2026-02-27 09:27:52] Scheduler hit an exception: Traceback (most recent call last):

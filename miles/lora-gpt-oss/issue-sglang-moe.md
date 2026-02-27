@@ -67,6 +67,18 @@ sglang/python/sglang/srt/lora/mem_pool.py L259
 
 # gpt-oss-20b
 
+note that the [lora init script](./gpt-oss/gen_lora.py) is different and more complicated than qwen3
+reason: gpt-oss fused all expert weights in one big layer, eg:
+```
+model.layers.23.mlp.router.weight                                                (32, 2880)
+model.layers.23.mlp.router.bias                                                  (32,)
+model.layers.23.mlp.experts.gate_up_proj                                         (32, 2880, 5760)
+model.layers.23.mlp.experts.gate_up_proj_bias                                    (32, 5760)
+model.layers.23.mlp.experts.down_proj                                            (32, 2880, 2880)
+model.layers.23.mlp.experts.down_proj_bias                                       (32, 2880)
+```
+during lora init, we need to convert batched params to nn.Linear so `peft` can find them by name
+
 error: 
 ```
 (SGLangEngine pid=206831) [2026-02-26 12:02:18] Using triton as backend of LoRA kernels.
@@ -184,8 +196,25 @@ root cause: config difference!!!
 gpt-oss config uses `num_local_experts` = 32 (not `num_experts`). cause memory pool init error
 besides, gpt-oss config also uses `intermediate_size` instead of `moe_intermediate_size`
 
-recommend to update gptossconfig
+we have 2 options, 
+- update config in gpt-oss.py 
+- update code in mem_pool.py
 
+let me know what works better! 
+
+I personally perfer to update gptossconfig but keep a note there it's for compatiablility to lora's mem_pool
+
+(use this)
+sglang/python/sglang/srt/utils/hf_transformers_utils.py (get_config)
+```
++    if getattr(config, "model_type", None) == "gpt_oss":
++        if not hasattr(config, "num_experts"):
++            config.num_experts = config.num_local_experts
++        if not hasattr(config, "moe_intermediate_size"):
++            config.moe_intermediate_size = config.intermediate_size
+```
+
+!!!! (this doesn't work) !!!!
 sglang/python/sglang/srt/models/gpt_oss.py
 ```
 +    attribute_map = {
