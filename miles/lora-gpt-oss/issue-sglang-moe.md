@@ -1,7 +1,69 @@
-# sglang moe issue for gpt-oss support
+# sglang moe issues
 
 env: https://github.com/sgl-project/sglang/pull/14105, latest commit
 added `--sglang-lora-backend triton` in miles side
+
+# qwen3-30b-a3b
+set target modules to 
+
+```
+target_modules=[
+    "q_proj", 
+    "k_proj",
+    "v_proj",
+    "gate_proj",
+    "up_proj",
+    "down_proj"
+]
+```
+
+get error:  
+
+```
+[2026-02-27 09:44:04] Scheduler hit an exception: Traceback (most recent call last):
+  File "/root/sglang/python/sglang/srt/managers/scheduler.py", line 3118, in run_scheduler_process
+    scheduler = Scheduler(
+                ^^^^^^^^^^
+  File "/root/sglang/python/sglang/srt/managers/scheduler.py", line 363, in __init__
+    self.init_model_worker()
+  File "/root/sglang/python/sglang/srt/managers/scheduler.py", line 559, in init_model_worker
+    self.init_tp_model_worker()
+  File "/root/sglang/python/sglang/srt/managers/scheduler.py", line 517, in init_tp_model_worker
+    self.tp_worker = TpModelWorker(
+                     ^^^^^^^^^^^^^^
+  File "/root/sglang/python/sglang/srt/managers/tp_worker.py", line 247, in __init__
+    self._init_model_runner()
+  File "/root/sglang/python/sglang/srt/managers/tp_worker.py", line 330, in _init_model_runner
+    self._model_runner = ModelRunner(
+                         ^^^^^^^^^^^^
+  File "/root/sglang/python/sglang/srt/model_executor/model_runner.py", line 415, in __init__
+    self.initialize(min_per_gpu_memory)
+  File "/root/sglang/python/sglang/srt/model_executor/model_runner.py", line 572, in initialize
+    self.init_lora_manager()
+  File "/root/sglang/python/sglang/srt/model_executor/model_runner.py", line 1497, in init_lora_manager
+    self.lora_manager = LoRAManager(
+                        ^^^^^^^^^^^^
+  File "/root/sglang/python/sglang/srt/lora/lora_manager.py", line 93, in __init__
+    self.init_state(
+  File "/root/sglang/python/sglang/srt/lora/lora_manager.py", line 391, in init_state
+    self.update_lora_info()
+  File "/root/sglang/python/sglang/srt/lora/lora_manager.py", line 305, in update_lora_info
+    gate_up_a = self.memory_pool.get_tensor(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/sglang/python/sglang/srt/lora/mem_pool.py", line 747, in get_tensor
+    return buffer_dict[target_module][layer_id]
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'gate_up_proj_moe'
+```
+
+root cause: qwen3-30b-a3b do not has shared experts, current LoRAMemoryPool init_buffer logic is too strict
+
+sglang/python/sglang/srt/lora/mem_pool.py L259
+```
+if module_name in ambiguous_modules and has_shared_experts and has_moe:
+```
+
+# gpt-oss-20b
 
 error: 
 ```
