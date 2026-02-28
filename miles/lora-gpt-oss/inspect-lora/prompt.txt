@@ -2,7 +2,7 @@ task1: analysize lora adapter's structure (name, shape and dtype of tensor)
 
 todo:
 1. download all lora adapters for gpt-oss-20b, under folder /media/hdddisk/tmp/gpt-oss-adapter
-this url contains all eligible adapters: https://huggingface.co/models?other=base_model:adapter:openai/gpt-oss-20b
+this url contains all eligible adapters: https://huggingface.co/models?other=base_model:adapter:openai/gpt-oss-20b, there should be 140 models
 download command: hf download <adapter name> --local-dir <local_dir>
 2. inspect lora structure
 script: (python3)
@@ -17,13 +17,14 @@ with safe_open(path, framework="pt") as f:
         print(f"{k:80s} {str(t.shape):30s} {t.dtype}")
 ```
 3. write down their lora adapter's structure in report-gpt-oss.md.
+pay extra attention to expert layer lora (shape, fused or not, lora shared for all experts or not, etc)
 
 
 task2: analysize lora adapter's structure (name, shape and dtype of tensor)
 
 todo:
 1. download all lora adapters for qwen3-30b-a3b, under folder /media/hdddisk/tmp/qwen3-30b-adapter
-this url contains all eligible adapters: https://huggingface.co/models?other=base_model:adapter:Qwen/Qwen3-30B-A3B
+this url contains all eligible adapters: https://huggingface.co/models?other=base_model:adapter:Qwen/Qwen3-30B-A3B, there should be 31 adapter models
 download command: hf download <adapter name> --local-dir <local_dir>
 2. inspect lora structure
 script: (python3)
@@ -37,4 +38,5 @@ with safe_open(path, framework="pt") as f:
         t = f.get_tensor(k)
         print(f"{k:80s} {str(t.shape):30s} {t.dtype}")
 ```
-3. write down their lora adapter's structure in report-qwen3-30b.md.
+3. write down their lora adapter's structure in report-qwen3-30b.md. 
+pay extra attention to expert layer lora (shape, fused or not, lora shared for all experts or not, etc)
