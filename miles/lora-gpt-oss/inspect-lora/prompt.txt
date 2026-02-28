@@ -1,0 +1,19 @@
+task: analysize lora adapter's structure (name, shape and dtype of tensor)
+
+todo:
+1. download all lora adapters for gpt-oss-20b, under /media/hdddisk/tmp/gpt-oss-adapter
+ref: (https://huggingface.co/models?other=base_model:adapter:openai/gpt-oss-20b)
+command: hf download <adapter name> --local-dir <local_dir>
+2. inspect lora structure
+script: (python3)
+```
+from safetensors import safe_open
+
+path = "/to/adapter/path/adapter_model.safetensors"
+
+with safe_open(path, framework="pt") as f:
+    for k in f.keys():
+        t = f.get_tensor(k)
+        print(f"{k:80s} {str(t.shape):30s} {t.dtype}")
+```
+3. write down their lora adapter's structure in report-gpt-oss.md.
