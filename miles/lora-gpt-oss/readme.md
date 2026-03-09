@@ -13,7 +13,7 @@ pip install -e .
 cd ..
 
 # install sglang
-git clone --branch add-moe-lora-support --single-branch https://github.com/Jonahcb/sglang.git
+git clone --branch add-moe-lora-support-tp --single-branch https://github.com/yushengsu-thu/sglang.git
 cd sglang
 pip install -e "python"
 cd ..
