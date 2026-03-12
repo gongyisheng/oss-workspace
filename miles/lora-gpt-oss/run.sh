@@ -11,7 +11,7 @@ set -ex
 
 # will prevent ray from buffering stdout/stderr
 export PYTHONBUFFERED=16
-export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0}
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1,2,3}
 
 # Load model architecture config
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
@@ -26,11 +26,11 @@ CKPT_ARGS=(
 )
 
 LORA_ARGS=(
-   --lora-rank 32                    # LoRA rank (typical values: 8, 16, 32, 64)
-   --lora-alpha 32                   # LoRA alpha (usually 2x rank)
+   --lora-rank 8                    # LoRA rank (typical values: 8, 16, 32, 64)
+   --lora-alpha 16                   # LoRA alpha (usually 2x rank)
    --lora-dropout 0.0                # LoRA dropout (0.0 for RL training)
-   --target-modules "all-linear"
-   --megatron-to-hf-mode bridge
+   --target-modules "gate_proj,up_proj,down_proj"
+   --sglang-lora-backend triton      # !!! must for moe-lora !!!, else display "Current LoRA backend does not support LoRA on MoE layers; skipping MoE layer"
 )
 
 ROLLOUT_ARGS=(
@@ -40,29 +40,30 @@ ROLLOUT_ARGS=(
    --apply-chat-template
    --rollout-shuffle
    --rm-type math
-   --num-rollout 10
+   --num-rollout 1
    --rollout-batch-size 32
    --n-samples-per-prompt 8
-   --rollout-max-response-len 8192
+   --rollout-max-response-len 4096
    --rollout-temperature 1.0
 
    # --num-steps-per-rollout 1
-   --global-batch-size 32
+   --global-batch-size 8
 )
 
 EVAL_ARGS=(
    # --eval-interval 20
    --eval-interval 10
    --eval-prompt-data gsm8k /root/gsm8k/test.parquet
+   --eval-input-key messages
    --n-samples-per-eval-prompt 1
-   --eval-max-response-len 8192
+   --eval-max-response-len 4096
    --eval-top-k 1
 )
 
 PERF_ARGS=(
    # Parallelism: TP=8, EP=4, PP=1, CP=1
    # SP is required when combining TP + EP
-   --tensor-model-parallel-size 1
+   --tensor-model-parallel-size 4
    --sequence-parallel
    --pipeline-model-parallel-size 1
    --context-parallel-size 1
@@ -77,7 +78,7 @@ PERF_ARGS=(
    # Batch size settings
    # Note: --use-dynamic-batch-size is not supported with --qkv-format bshd
    --micro-batch-size 1
-   --max-tokens-per-gpu 9216
+   --max-tokens-per-gpu 4096
 )
 
 GRPO_ARGS=(
@@ -107,10 +108,10 @@ OPTIMIZER_ARGS=(
 
 SGLANG_ARGS=(
    # TP size for sglang inference engine
-   --rollout-num-gpus-per-engine 1
+   --rollout-num-gpus-per-engine 4
    --sglang-dtype bfloat16
    --sglang-decode-log-interval 1000
-   --sglang-mem-fraction-static 0.70
+   --sglang-mem-fraction-static 0.35
 )
 
 WANDB_ARGS=(
@@ -128,12 +129,13 @@ MISC_ARGS=(
    # Must use --qkv-format bshd for the fused backend to work with this model's attention pattern.
    --qkv-format bshd
    --attention-backend fused
+   --update-weight-buffer-size 4294967296
 )
 
 
 # launch the master node of ray in container
 export MASTER_ADDR=${MASTER_ADDR:-"127.0.0.1"}
-ray start --head --node-ip-address ${MASTER_ADDR} --num-gpus 1 --disable-usage-stats --dashboard-host=0.0.0.0 --dashboard-port=8265
+ray start --head --node-ip-address ${MASTER_ADDR} --num-gpus 4 --disable-usage-stats --dashboard-host=0.0.0.0 --dashboard-port=8265
 
 # Build the runtime environment JSON with proper variable substitution
 RUNTIME_ENV_JSON="{
@@ -148,9 +150,10 @@ ray job submit --address="http://127.0.0.1:8265" \
    --runtime-env-json="${RUNTIME_ENV_JSON}" \
    -- python3 train.py \
    --actor-num-nodes 1 \
-   --actor-num-gpus-per-node 1 \
+   --actor-num-gpus-per-node 4 \
    --colocate \
    ${MODEL_ARGS[@]} \
+   ${LORA_ARGS[@]} \
    ${CKPT_ARGS[@]} \
    ${ROLLOUT_ARGS[@]} \
    ${OPTIMIZER_ARGS[@]} \
@@ -159,4 +162,5 @@ ray job submit --address="http://127.0.0.1:8265" \
    ${PERF_ARGS[@]} \
    ${EVAL_ARGS[@]} \
    ${SGLANG_ARGS[@]} \
-   ${MISC_ARGS[@]}
+   ${MISC_ARGS[@]} \
+   --save-debug-rollout-data /tmp/gpt_oss_rollout_{rollout_id}.pt
