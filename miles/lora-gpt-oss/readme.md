@@ -7,19 +7,19 @@ docker exec -it sglang-rl-yishenggong bash
 
 # install miles
 rm -r miles
-git clone --branch miles-lora-megatron --single-branch https://github.com/yushengsu-thu/miles.git 
+git clone --branch miles-gpt-oss-moe-lora --single-branch https://github.com/gongyisheng/miles.git
 cd miles
 pip install -e .
 cd ..
 
 # install sglang
-git clone --branch add-moe-lora-support-tp --single-branch https://github.com/yushengsu-thu/sglang.git
+git clone --branch sglang-gpt-oss-moe-lora --single-branch https://github.com/gongyisheng/sglang.git
 cd sglang
 pip install -e "python"
 cd ..
 
 # install megatron bridge
-git clone --branch merged-megatron-0.16.0rc0 --single-branch https://github.com/yushengsu-thu/Megatron-Bridge.git
+git clone --branch merged-megatron-0.16.0rc0-gpt-oss-moe-lora --single-branch https://github.com/gongyisheng/Megatron-Bridge.git
 cd Megatron-Bridge
 pip install -e . --no-deps --no-build-isolation
 pip install megatron-energon --no-deps
@@ -27,7 +27,7 @@ pip install multi-storage-client --no-deps
 cd ..
 
 # install misc dep
-pip install flashinfer-jit-cache==0.6.4 --index-url https://flashinfer.ai/whl/cu129
+pip install flashinfer-jit-cache==0.6.6 --index-url https://flashinfer.ai/whl/cu129
 ```
 
 ## model and dataset
