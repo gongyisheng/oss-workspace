@@ -43,7 +43,7 @@ megatron-bridge 0.3.0rc0 requires transformers<5.0.0,>=4.57.1, but you have tran
 
 ## model and dataset
 ```
-huggingface-cli download --repo-type dataset zhuzilin/dapo-math-17k --local-dir /root/dapo-math-17k
-huggingface-cli download --repo-type dataset zhuzilin/gsm8k --local-dir /root/gsm8k
-huggingface-cli download openai/gpt-oss-20b --local-dir /root/gpt-oss-20b
+hf download --repo-type dataset zhuzilin/dapo-math-17k --local-dir /root/dapo-math-17k
+hf download --repo-type dataset zhuzilin/gsm8k --local-dir /root/gsm8k
+hf download openai/gpt-oss-20b --local-dir /root/gpt-oss-20b
 ```
