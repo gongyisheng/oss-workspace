@@ -28,6 +28,17 @@ cd ..
 
 # install misc dep
 pip install flashinfer-jit-cache==0.6.6 --index-url https://flashinfer.ai/whl/cu129
+
+# dep issues
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+megatron-bridge 0.3.0rc0 requires causal-conv1d, which is not installed.
+megatron-bridge 0.3.0rc0 requires hydra-core<=1.3.2,>1.3, which is not installed.
+megatron-bridge 0.3.0rc0 requires mamba-ssm, which is not installed.
+megatron-bridge 0.3.0rc0 requires nvidia-resiliency-ext, which is not installed.
+megatron-bridge 0.3.0rc0 requires open-clip-torch>=3.2.0, which is not installed.
+megatron-bridge 0.3.0rc0 requires pyyaml>=6.0.2, but you have pyyaml 6.0.1 which is incompatible.
+megatron-bridge 0.3.0rc0 requires transformer-engine[pytorch]<2.10.0,>=2.9.0a0, but you have transformer-engine 2.10.0 which is incompatible.
+megatron-bridge 0.3.0rc0 requires transformers<5.0.0,>=4.57.1, but you have transformers 5.3.0 which is incompatible.
 ```
 
 ## model and dataset
