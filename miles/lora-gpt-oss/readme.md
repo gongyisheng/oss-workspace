@@ -27,7 +27,7 @@ pip install multi-storage-client --no-deps
 cd ..
 
 # install misc dep
-pip install flashinfer-jit-cache==0.6.6 --index-url https://flashinfer.ai/whl/cu129
+pip install flashinfer-jit-cache==0.6.4 --index-url https://flashinfer.ai/whl/cu129
 
 # dep issues
 ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
