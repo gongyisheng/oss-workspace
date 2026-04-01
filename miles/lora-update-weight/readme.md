@@ -8,7 +8,7 @@ docker exec -it sglang-rl-yishenggong-2 bash
 
 ## model and dataset
 ```
-huggingface-cli download --repo-type dataset zhuzilin/dapo-math-17k --local-dir /root/dapo-math-17k
-huggingface-cli download --repo-type dataset zhuzilin/gsm8k --local-dir /root/gsm8k
-huggingface-cli download Qwen/Qwen3-4B --local-dir /root/qwen3-4b
+hf download --repo-type dataset zhuzilin/dapo-math-17k --local-dir /root/dapo-math-17k
+hf download --repo-type dataset zhuzilin/gsm8k --local-dir /root/gsm8k
+hf download Qwen/Qwen2.5-3B-Instruct --local-dir /root/Qwen2.5-3B-Instruct
 ```
