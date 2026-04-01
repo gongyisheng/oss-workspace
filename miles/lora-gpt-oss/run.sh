@@ -11,7 +11,7 @@ set -ex
 
 # will prevent ray from buffering stdout/stderr
 export PYTHONBUFFERED=16
-export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-4,5,6,7}
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1,2,3}
 
 # Load model architecture config
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
@@ -42,10 +42,10 @@ ROLLOUT_ARGS=(
    --num-rollout 100
    --rollout-batch-size 32
    --n-samples-per-prompt 8
-   --rollout-max-response-len 8192
+   --rollout-max-response-len 4096
    --rollout-temperature 1.0
 
-   --global-batch-size 64
+   --global-batch-size 8
 )
 
 EVAL_ARGS=(
@@ -75,7 +75,7 @@ PERF_ARGS=(
    # Batch size settings
    # Note: --use-dynamic-batch-size is not supported with --qkv-format bshd
    --micro-batch-size 1
-   --max-tokens-per-gpu 8192
+   --max-tokens-per-gpu 4096
 )
 
 GRPO_ARGS=(
@@ -92,7 +92,7 @@ GRPO_ARGS=(
 
 OPTIMIZER_ARGS=(
    --optimizer adam
-   --lr 1e-6
+   --lr 1e-5
    --lr-decay-style constant
    --weight-decay 0.1
    --adam-beta1 0.9
@@ -108,7 +108,7 @@ SGLANG_ARGS=(
    --rollout-num-gpus-per-engine 4
    --sglang-dtype bfloat16
    --sglang-decode-log-interval 1000
-   --sglang-mem-fraction-static 0.25
+   --sglang-mem-fraction-static 0.15
    --sglang-disable-cuda-graph
 )
 
