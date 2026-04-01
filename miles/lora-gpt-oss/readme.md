@@ -27,7 +27,7 @@ pip install multi-storage-client --no-deps
 cd ..
 
 # install misc dep
-pip install flashinfer-jit-cache==0.6.4 --index-url https://flashinfer.ai/whl/cu129
+pip install flashinfer-jit-cache==0.6.6 --index-url https://flashinfer.ai/whl/cu129
 
 # dep issues
 ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
@@ -45,5 +45,6 @@ megatron-bridge 0.3.0rc0 requires transformers<5.0.0,>=4.57.1, but you have tran
 ```
 hf download --repo-type dataset zhuzilin/dapo-math-17k --local-dir /root/dapo-math-17k
 hf download --repo-type dataset zhuzilin/gsm8k --local-dir /root/gsm8k
+hf download --repo-type dataset zhuzilin/aime-2024 --local-dir /root/aime-2024
 hf download openai/gpt-oss-20b --local-dir /root/gpt-oss-20b
 ```
