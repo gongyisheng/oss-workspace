@@ -1,6 +1,7 @@
 from safetensors import safe_open
 
 path = "/root/lora_model/gpt-oss-20b/adapter_model.safetensors"
+# path = "/home/yisheng/Documents/dev/oss-workspace/checkpoints/yushengsu-lora-diff-gpt-oss-20b/adapter_model.safetensors"
 
 with safe_open(path, framework="pt") as f:
     for k in f.keys():
