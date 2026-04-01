@@ -33,7 +33,7 @@ EVAL_CONFIG_PATH=${SKILLS_EVAL_CONFIG_PATH:-"${REPO_ROOT}/miles/examples/eval/sc
 
 
 CKPT_ARGS=(
-    --hf-checkpoint /root/qwen3-4B
+   --hf-checkpoint /root/qwen2.5-4B
    --megatron-to-hf-mode bridge
 )
 
