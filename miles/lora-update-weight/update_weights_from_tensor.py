@@ -53,9 +53,6 @@ class UpdateWeightFromTensor:
         self.quantization_config = quantization_config
         self.weight_version = 0
         self.is_lora = is_lora
-        self._lora_loaded = False
-        self._lora_base_synced = False
-
         self._hf_base_weight_iterator = HfWeightIteratorBase.create(
             args=args,
             model=model,
@@ -71,8 +68,10 @@ class UpdateWeightFromTensor:
                 quantization_config=quantization_config,
                 is_lora=True,
             )
+            self._lora_config = build_lora_sync_config(args)
+            self._lora_loaded = False
+            self._lora_base_synced = False
 
-        self._lora_config = build_lora_sync_config(args) if self.is_lora else None
         # Create IPC gather groups within megatron.
         for start_rank in range(0, dist.get_world_size(), self.args.rollout_num_gpus_per_engine):
             end_rank = start_rank + self.args.rollout_num_gpus_per_engine

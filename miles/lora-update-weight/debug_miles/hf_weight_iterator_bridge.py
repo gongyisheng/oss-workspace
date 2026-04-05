@@ -1,0 +1,100 @@
+import dataclasses
+import hashlib
+
+import torch
+
+from miles.utils import megatron_bridge_utils
+from miles.utils.iter_utils import chunk_named_params_by_size
+
+from ..megatron_to_hf import postprocess_hf_param
+from ..misc_utils import strip_param_name_prefix
+from .hf_weight_iterator_base import HfWeightIteratorBase
+
+
+def _compute_hash_tensor(x: torch.Tensor) -> str:
+    """Hash raw bytes of tensor via hashlib for collision resistance."""
+    x = x.contiguous().view(-1).view(torch.int8)
+    return hashlib.sha256(x.cpu().numpy().tobytes()).hexdigest()[:16]
+
+
+class HfWeightIteratorBridge(HfWeightIteratorBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        from megatron.bridge import AutoBridge
+
+        import miles_plugins.megatron_bridge  # noqa: F401
+
+        self._bridge = AutoBridge.from_hf_pretrained(self.args.hf_checkpoint, trust_remote_code=True)
+
+    def get_hf_weight_chunks(self, megatron_local_weights):
+        # TODO: support quantization (e.g. modify megatron-bridge to provide megatron param name)
+        renamed_megatron_local_weights = {strip_param_name_prefix(k): v for k, v in megatron_local_weights.items()}
+        with megatron_bridge_utils.patch_megatron_model(self.model):
+            if self.is_lora:
+                named_weights = self._bridge.export_adapter_weights(
+                    self.model,
+                    cpu=False,
+                    show_progress=False,
+                )
+            else:
+                conversion_tasks = self._bridge.get_conversion_tasks(self.model)
+                conversion_tasks = _process_conversion_tasks(conversion_tasks, renamed_megatron_local_weights)
+                named_weights = self._bridge.export_hf_weights(
+                    self.model,
+                    cpu=False,
+                    conversion_tasks=conversion_tasks,
+                )
+
+            # TODO: verify if postprocess_hf_param is needed for LoRA weights
+            named_weights = (
+                (
+                    hf_param_name,
+                    postprocess_hf_param(
+                        args=self.args,
+                        megatron_param_name=megatron_param_name,
+                        hf_param_name=hf_param_name,
+                        param=weight,
+                    ),
+                )
+                for hf_param_name, weight, megatron_param_name in named_weights
+            )
+
+            label = "lora" if self.is_lora else "base"
+            for chunk in chunk_named_params_by_size(named_weights, chunk_size=self.args.update_weight_buffer_size):
+                for name, tensor in chunk:
+                    print(
+                        f"[DEBUG hf_iter] [{label}] name={name} shape={list(tensor.shape)} hash={_compute_hash_tensor(tensor)}",
+                        flush=True,
+                    )
+                yield chunk
+
+
+def _process_conversion_tasks(vanilla_conversion_tasks, new_weight_dict):
+    def _handle_one(task):
+        if task.param_weight is None:
+            return task
+
+        weight_dict_key = f"vp_stages.{task.vp_stage}.{task.param_name}"
+        assert (
+            weight_dict_key in new_weight_dict
+        ), f"{weight_dict_key=} not in new_weight_dict ({task.vp_stage=}, {task.param_name=}, {list(new_weight_dict)=})"
+
+        new_param_weight = new_weight_dict[weight_dict_key]
+        new_param_weight = new_param_weight.cuda()
+        return dataclasses.replace(task, param_weight=new_param_weight)
+
+    return _MapWithLen(_handle_one, vanilla_conversion_tasks)
+
+
+class _MapWithLen:
+    def __init__(self, fn, xs):
+        self.fn = fn
+        self.xs = xs
+
+    def __len__(self):
+        return len(self.xs)
+
+    def __iter__(self):
+        for x in self.xs:
+            yield self.fn(x)
