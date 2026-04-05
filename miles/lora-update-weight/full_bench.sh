@@ -26,14 +26,6 @@ CKPT_ARGS=(
    --megatron-to-hf-mode bridge
 )
 
-LORA_ARGS=(
-   --lora-rank 32                    # LoRA rank (typical values: 8, 16, 32, 64)
-   --lora-alpha 32                   # LoRA alpha (usually 2x rank)
-   --lora-dropout 0.0                # LoRA dropout (0.0 for RL training)
-   --target-modules "all-linear"
-   --megatron-to-hf-mode bridge
-)
-
 ROLLOUT_ARGS=(
    --prompt-data /root/gsm8k/train.parquet
    --input-key messages
@@ -87,8 +79,8 @@ GRPO_ARGS=(
 
 OPTIMIZER_ARGS=(
    --optimizer adam
-   # --lr 1e-6
-   --lr 1e-5                         # Higher LR often works better for LoRA
+   --lr 1e-6
+   # --lr 1e-5                         # Higher LR often works better for LoRA
    --lr-decay-style constant
    --weight-decay 0.1
    --adam-beta1 0.9
@@ -99,7 +91,7 @@ WANDB_ARGS=(
    # --use-wandb
    --wandb-host https://wandb.ai/
    --wandb-project mile-lora-update-weight-refactory
-   --wandb-group qwen2.5-3B-lora-benchmark
+   --wandb-group qwen2.5-3B-full-benchmark
 )
 
 
@@ -147,7 +139,6 @@ ray job submit --address="http://127.0.0.1:8265" \
    --use-miles-router \
    ${MODEL_ARGS[@]} \
    ${CKPT_ARGS[@]} \
-   ${LORA_ARGS[@]} \
    ${OPTIMIZER_ARGS[@]} \
    ${GRPO_ARGS[@]} \
    ${WANDB_ARGS[@]} \
