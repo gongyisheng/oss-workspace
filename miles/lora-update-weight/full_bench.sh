@@ -1,9 +1,9 @@
 #!/bin/bash
 export FLASHINFER_DISABLE_VERSION_CHECK=1
-export GPUS_PER_NODE=1
+export GPUS_PER_NODE=2
 # will prevent ray from buffering stdout/stderr
 export PYTHONBUFFERED=1
-export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0}
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-6,7}
 
 # for rerun the task
 pkill sglang
@@ -55,7 +55,7 @@ EVAL_ARGS=(
 )
 
 PERF_ARGS=(
-   --tensor-model-parallel-size 1
+   --tensor-model-parallel-size 2
    --sequence-parallel
    --pipeline-model-parallel-size 1
    --context-parallel-size 1
