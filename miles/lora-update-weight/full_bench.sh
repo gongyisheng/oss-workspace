@@ -34,7 +34,7 @@ ROLLOUT_ARGS=(
    --rollout-shuffle
    --rm-type math
    # --num-rollout 100
-   --num-rollout 10 # only train 10 stesp
+   --num-rollout 31 # only train 30 stesp
    # --rollout-batch-size 32
    --rollout-batch-size 16 # for testing 
    --n-samples-per-prompt 8
@@ -88,9 +88,9 @@ OPTIMIZER_ARGS=(
 )
 
 WANDB_ARGS=(
-   # --use-wandb
+   --use-wandb
    --wandb-host https://wandb.ai/
-   --wandb-project mile-lora-update-weight-refactory
+   --wandb-project miles-lora-update-weight-refactory
    --wandb-group qwen2.5-3B-full-benchmark
 )
 
