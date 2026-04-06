@@ -28,8 +28,8 @@ def main():
     parser.add_argument("--base-url", default="http://127.0.0.1:30000")
     parser.add_argument("--prompt", default=None)
     parser.add_argument("--lora", default=None, help="LoRA adapter name, e.g. miles_lora")
-    parser.add_argument("--max-tokens", type=int, default=128)
-    parser.add_argument("--temperature", type=float, default=0)
+    parser.add_argument("--max-tokens", type=int, default=512)
+    parser.add_argument("--temperature", type=float, default=1)
     args = parser.parse_args()
 
     prompts = [args.prompt] if args.prompt else [
