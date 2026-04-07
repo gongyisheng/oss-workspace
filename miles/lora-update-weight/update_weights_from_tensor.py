@@ -11,6 +11,7 @@ from ray import ObjectRef
 from ray.actor import ActorHandle
 
 from miles.backends.megatron_utils.lora_utils import LORA_ADAPTER_NAME, build_lora_sync_config
+from miles.backends.training_utils.parallel import get_parallel_state
 from miles.utils.distributed_utils import get_gloo_group
 
 from ..sglang import FlattenedTensorBucket, MultiprocessingSerializer
@@ -53,21 +54,14 @@ class UpdateWeightFromTensor:
         self.quantization_config = quantization_config
         self.weight_version = 0
         self.is_lora = is_lora
-        self._hf_base_weight_iterator = HfWeightIteratorBase.create(
+        self._hf_weight_iterator = HfWeightIteratorBase.create(
             args=args,
             model=model,
             model_name=model_name,
             quantization_config=quantization_config,
-            is_lora=False,
+            is_lora=self.is_lora
         )
         if self.is_lora:
-            self._hf_lora_weight_iterator = HfWeightIteratorBase.create(
-                args=args,
-                model=model,
-                model_name=model_name,
-                quantization_config=quantization_config,
-                is_lora=True,
-            )
             self._lora_config = build_lora_sync_config(args)
             self._lora_loaded = False
             self._lora_base_synced = False
@@ -121,7 +115,7 @@ class UpdateWeightFromTensor:
             self.distributed_rollout_engines = rollout_engines[colocate_engine_nums:]
             distributed_gpu_counts = engine_gpu_counts[colocate_engine_nums:]
             self._is_distributed_src_rank = (
-                mpu.get_data_parallel_rank(with_context_parallel=True) == 0
+                get_parallel_state().intra_dp_cp.rank == 0
                 and mpu.get_tensor_model_parallel_rank() == 0
                 and mpu.get_pipeline_model_parallel_rank() == 0
             )
@@ -187,9 +181,9 @@ class UpdateWeightFromTensor:
             ray.get([engine.flush_cache.remote() for engine in self.rollout_engines])
             if self.quantization_config and self.quantization_config["quant_method"] in ["compressed-tensors"]:
                 post_process_weights(
+                    rollout_engines=self.rollout_engines,
                     restore_weights_before_load=True,
                     post_process_quantization=False,
-                    rollout_engines=self.rollout_engines,
                 )
         dist.barrier(group=get_gloo_group())
 
@@ -198,7 +192,7 @@ class UpdateWeightFromTensor:
         # For LoRA+distributed: base weights are frozen, skip after first round.
         if not (self.is_lora and self.use_distribute and self._lora_base_synced):
             base_sync_chunk_count = 0
-            for hf_named_tensors in self._hf_base_weight_iterator.get_hf_weight_chunks(megatron_local_weights):
+            for hf_named_tensors in self._hf_weight_iterator.get_hf_weight_chunks(megatron_local_weights, weight_type="base"):
                 refs, long_lived_tensors = self._send_base_params(hf_named_tensors)
                 results = ray.get(refs)
                 _check_weight_sync_results(results, is_lora=False)
@@ -207,7 +201,7 @@ class UpdateWeightFromTensor:
 
         if self.is_lora:
             lora_sync_chunk_count = 0
-            for hf_named_tensors in self._hf_lora_weight_iterator.get_hf_weight_chunks(megatron_local_weights):
+            for hf_named_tensors in self._hf_weight_iterator.get_hf_weight_chunks(megatron_local_weights, weight_type="lora"):
                 refs, long_lived_tensors = self._send_lora_params(hf_named_tensors)
                 results = ray.get(refs)
                 _check_weight_sync_results(results, is_lora=True)
@@ -233,9 +227,9 @@ class UpdateWeightFromTensor:
                 "mxfp8",
             ]:
                 post_process_weights(
+                    rollout_engines=self.rollout_engines,
                     restore_weights_before_load=False,
                     post_process_quantization=True,
-                    rollout_engines=self.rollout_engines,
                 )
             ray.get([engine.continue_generation.remote() for engine in self.rollout_engines])
         dist.barrier(group=get_gloo_group())
