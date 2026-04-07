@@ -1,9 +1,9 @@
 # lora support for gpt-oss
 env
 ```
-docker create --gpus all --cap-add SYS_PTRACE --security-opt seccomp=unconfined --privileged --shm-size 32G --ulimit nofile=65536:65536 --ulimit memlock=-1 --ulimit stack=67108864 --ipc=host -v /home/yisheng:/workspace -v /data/cache/huggingface:/root/.cache/huggingface -v /data:/data --name sglang-rl-yishenggong radixark/miles:dev sleep infinity
-docker start sglang-rl-yishenggong
-docker exec -it sglang-rl-yishenggong bash
+docker create --gpus all --cap-add SYS_PTRACE --security-opt seccomp=unconfined --privileged --shm-size 32G --ulimit nofile=65536:65536 --ulimit memlock=-1 --ulimit stack=67108864 --ipc=host -v /home/yisheng:/workspace -v /data/cache/huggingface:/root/.cache/huggingface -v /data:/data --name sglang-rl-yishenggong-gpt-oss radixark/miles:dev sleep infinity
+docker start sglang-rl-yishenggong-gpt-oss
+docker exec -it sglang-rl-yishenggong-gpt-oss bash
 
 # install miles
 rm -r miles
@@ -13,7 +13,7 @@ pip install -e .
 cd ..
 
 # install sglang
-git clone --branch sglang-gpt-oss-moe-lora --single-branch https://github.com/gongyisheng/sglang.git
+git clone --branch miles-gpt-oss-moe-lora --single-branch https://github.com/gongyisheng/sglang.git
 cd sglang
 pip install -e "python"
 cd ..
@@ -27,7 +27,8 @@ pip install multi-storage-client --no-deps
 cd ..
 
 # install misc dep
-pip install flashinfer-jit-cache==0.6.6 --index-url https://flashinfer.ai/whl/cu129
+pip install transformers==4.57.1
+pip install flashinfer-jit-cache==0.6.7 --index-url https://flashinfer.ai/whl/cu129
 
 # dep issues
 ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
