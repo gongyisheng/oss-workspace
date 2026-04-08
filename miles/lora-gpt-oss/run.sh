@@ -10,8 +10,8 @@ pkill -9 python
 set -ex
 
 # will prevent ray from buffering stdout/stderr
-export PYTHONBUFFERED=1
-export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1,2,3}
+export PYTHONBUFFERED=16
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-4,5,6,7}
 
 # Load model architecture config
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
@@ -20,8 +20,8 @@ source "${SCRIPT_DIR}/../../scripts/models/gpt-oss-20b.sh"
 CKPT_ARGS=(
    --hf-checkpoint /root/gpt-oss-20b
    --megatron-to-hf-mode bridge
-   --save /root/checkpoints/gpt-oss-20b-lora
-   --save-interval 10
+   # --save $BASE_DIR/gpt-oss-20b-BF16
+   # --save-interval 50
 )
 
 LORA_ARGS=(
@@ -39,7 +39,7 @@ ROLLOUT_ARGS=(
    --apply-chat-template
    --rollout-shuffle
    --rm-type math
-   --num-rollout 5
+   --num-rollout 1
    --rollout-batch-size 32
    --n-samples-per-prompt 8
    --rollout-max-response-len 4096
@@ -50,11 +50,10 @@ ROLLOUT_ARGS=(
 
 EVAL_ARGS=(
    --eval-interval 10
-   --eval-prompt-data aime-2024 /root/aime-2024/aime-2024.jsonl
-   --eval-input-key prompt
-   --eval-label-key label
+   --eval-prompt-data gsm8k /root/gsm8k/test.parquet
+   --eval-input-key messages
    --n-samples-per-eval-prompt 1
-   --eval-max-response-len 8192
+   --eval-max-response-len 4096
    --eval-top-k 1
 )
 
@@ -93,6 +92,7 @@ GRPO_ARGS=(
 OPTIMIZER_ARGS=(
    --optimizer adam
    --lr 1e-5
+   # --lr 1e-6
    --lr-decay-style constant
    --weight-decay 0.1
    --adam-beta1 0.9
@@ -108,8 +108,7 @@ SGLANG_ARGS=(
    --rollout-num-gpus-per-engine 4
    --sglang-dtype bfloat16
    --sglang-decode-log-interval 1000
-   --sglang-mem-fraction-static 0.15
-   --sglang-disable-cuda-graph
+   --sglang-mem-fraction-static 0.2
 )
 
 WANDB_ARGS=(
