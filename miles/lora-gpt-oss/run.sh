@@ -10,7 +10,7 @@ pkill -9 python
 set -ex
 
 # will prevent ray from buffering stdout/stderr
-export PYTHONBUFFERED=16
+export PYTHONBUFFERED=1
 export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1,2,3}
 
 # Load model architecture config
@@ -39,7 +39,7 @@ ROLLOUT_ARGS=(
    --apply-chat-template
    --rollout-shuffle
    --rm-type math
-   --num-rollout 100
+   --num-rollout 5
    --rollout-batch-size 32
    --n-samples-per-prompt 8
    --rollout-max-response-len 4096
@@ -113,7 +113,7 @@ SGLANG_ARGS=(
 )
 
 WANDB_ARGS=(
-   --use-wandb
+   # --use-wandb
    --wandb-project miles-gpt-oss
    --wandb-group "gpt-oss-20b-moe-lora"
 )
