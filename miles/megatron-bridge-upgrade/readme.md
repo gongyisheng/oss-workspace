@@ -11,4 +11,7 @@ cd sglang
 git checkout sglang-miles-v0.5.10
 pip install -e "python"
 cd ..
+
+# install misc dep
+pip install flashinfer-jit-cache==0.6.7.post3 --index-url https://flashinfer.ai/whl/cu129
 ```
