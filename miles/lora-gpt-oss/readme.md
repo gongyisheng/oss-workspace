@@ -28,7 +28,7 @@ cd ..
 
 # install misc dep
 pip install transformers==4.57.1
-pip install flashinfer-jit-cache==0.6.7.post2 --index-url https://flashinfer.ai/whl/cu129
+pip install flashinfer-jit-cache==0.6.7.post3 --index-url https://flashinfer.ai/whl/cu129
 
 # dep issues
 ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
