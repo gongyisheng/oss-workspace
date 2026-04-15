@@ -12,6 +12,22 @@ git checkout sglang-miles-v0.5.10
 pip install -e "python"
 cd ..
 
+# install megatron bridge
+git clone https://github.com/radixark/Megatron-Bridge.git
+cd Megatron-Bridge
+git checkout bridge
+pip install -e . --no-deps --no-build-isolation
+pip install megatron-energon --no-deps
+pip install multi-storage-client --no-deps
+cd ..
+
 # install misc dep
-pip install flashinfer-jit-cache==0.6.7.post3 --index-url https://flashinfer.ai/whl/cu129
+pip install flashinfer-jit-cache==0.6.7.post2 --index-url https://flashinfer.ai/whl/cu129
+```
+
+## model and dataset
+```
+hf download --repo-type dataset zhuzilin/dapo-math-17k --local-dir /root/dapo-math-17k
+hf download --repo-type dataset zhuzilin/gsm8k --local-dir /root/gsm8k
+hf download Qwen/Qwen2.5-3B-Instruct --local-dir /root/Qwen2.5-3B-Instruct
 ```
