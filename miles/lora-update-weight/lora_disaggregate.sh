@@ -3,7 +3,7 @@ export FLASHINFER_DISABLE_VERSION_CHECK=1
 export GPUS_PER_NODE=1
 # will prevent ray from buffering stdout/stderr
 export PYTHONBUFFERED=1
-export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-5}
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1}
 
 # for rerun the task
 pkill sglang
@@ -99,11 +99,12 @@ WANDB_ARGS=(
    # --use-wandb
    --wandb-host https://wandb.ai/
    --wandb-project miles-lora-update-weight-refactory
-   --wandb-group qwen2.5-3B-lora-refactory
+   --wandb-group qwen2.5-3B-lora-disaggregate
 )
 
 
 SGLANG_ARGS=(
+   --rollout-num-gpus $GPUS_PER_NODE
    --rollout-num-gpus-per-engine 1
    # --sglang-mem-fraction-static 0.7
    --sglang-mem-fraction-static 0.2
@@ -142,7 +143,6 @@ ray job submit --address="http://127.0.0.1:8265" \
    -- python3 train.py \
    --actor-num-nodes 1 \
    --actor-num-gpus-per-node $GPUS_PER_NODE \
-   --colocate \
    --calculate-per-token-loss \
    --use-miles-router \
    ${MODEL_ARGS[@]} \
