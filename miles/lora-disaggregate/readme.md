@@ -1,7 +1,7 @@
 # lora-disaggregate
 
 ```
-docker create --gpus all --cap-add SYS_PTRACE --security-opt seccomp=unconfined --privileged --shm-size 32G --ulimit nofile=65536:65536 --ulimit memlock=-1 --ulimit stack=67108864 --ipc=host -v /home/yisheng:/workspace -v /data/cache/huggingface:/root/.cache/huggingface -v /data:/data --name sglang-rl-yishenggong-lora-disaggregate radixark/miles:dev sleep infinity
+docker create --gpus all --network host --cap-add SYS_PTRACE --security-opt seccomp=unconfined --privileged --shm-size 32G --ulimit nofile=65536:65536 --ulimit memlock=-1 --ulimit stack=67108864 --ipc=host -v /home/yisheng:/workspace -v /data/cache/huggingface:/root/.cache/huggingface -v /data:/data --name sglang-rl-yishenggong-lora-disaggregate radixark/miles:dev sleep infinity
 docker start sglang-rl-yishenggong-lora-disaggregate
 docker exec -it sglang-rl-yishenggong-lora-disaggregate bash
 
