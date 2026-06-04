@@ -5,13 +5,20 @@ docker create --gpus all --network host --cap-add SYS_PTRACE --security-opt secc
 docker start sglang-rl-yishenggong-lora-disaggregate
 docker exec -it sglang-rl-yishenggong-lora-disaggregate bash
 
+git clone https://github.com/gongyisheng/sglang.git
+cd sglang
+git checkout miles-lora-disaggregate-mode-2
+pip install -e "python"
+cd ..
+
 rm -r miles
 git clone https://github.com/gongyisheng/miles.git
 cd miles
 git checkout miles-lora-disaggregate-mode-2
 
 # install misc dep
-# pip install flashinfer-jit-cache==0.6.7.post2 --index-url https://flashinfer.ai/whl/cu129
+# pip list | grep flashinfer
+# pip install flashinfer-jit-cache==0.6.12 --index-url https://flashinfer.ai/whl/cu129
 ```
 
 ## model and dataset
