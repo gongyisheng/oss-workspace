@@ -17,8 +17,11 @@ cd miles
 git checkout miles-lora-disaggregate-mode-2
 
 # install misc dep
-# pip list | grep flashinfer
-# pip install flashinfer-jit-cache==0.6.12 --index-url https://flashinfer.ai/whl/cu129
+pip list | grep flashinfer
+
+pip install flashinfer-jit-cache==0.6.12 --index-url https://flashinfer.ai/whl/cu129
+pip install --no-deps --force-reinstall "torchvision==0.26.0+cu130" --index-url https://download.pytorch.org/whl/cu130
+echo "/usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib" > /etc/ld.so.conf.d/nvidia-cu13.conf && ldconfig
 ```
 
 ## model and dataset
