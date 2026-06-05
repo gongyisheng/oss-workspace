@@ -7,21 +7,20 @@ docker exec -it sglang-rl-yishenggong-lora-disaggregate bash
 
 git clone https://github.com/gongyisheng/sglang.git
 cd sglang
-git checkout miles-lora-disaggregate-mode-2
+git checkout sglang-miles-lora-disaggregate-mode-2
 pip install -e "python"
 cd ..
+
+# install misc dep
+pip list | grep flashinfer
+pip install flashinfer-jit-cache==0.6.11.post1 --index-url https://flashinfer.ai/whl/cu129
+# pip install --no-deps --force-reinstall "torchvision==0.26.0+cu130" --index-url https://download.pytorch.org/whl/cu130
+# echo "/usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib" > /etc/ld.so.conf.d/nvidia-cu13.conf && ldconfig
 
 rm -r miles
 git clone https://github.com/gongyisheng/miles.git
 cd miles
 git checkout miles-lora-disaggregate-mode-2
-
-# install misc dep
-pip list | grep flashinfer
-
-pip install flashinfer-jit-cache==0.6.12 --index-url https://flashinfer.ai/whl/cu129
-pip install --no-deps --force-reinstall "torchvision==0.26.0+cu130" --index-url https://download.pytorch.org/whl/cu130
-echo "/usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib" > /etc/ld.so.conf.d/nvidia-cu13.conf && ldconfig
 ```
 
 ## model and dataset
