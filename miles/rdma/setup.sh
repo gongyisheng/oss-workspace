@@ -20,3 +20,8 @@ sudo rdma link add rxe0 type rxe netdev "$IFACE" 2>/dev/null || true
 # 4. Confirm the device shows up (state should be ACTIVE).
 rdma link show
 ibv_devices
+
+# 5. Build the demo binary into build/ (created if missing).
+mkdir -p build
+cc -Wall -O2 -o build/rdma_demo rdma_demo.c -lrdmacm -libverbs
+echo "built build/rdma_demo"
