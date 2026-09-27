@@ -18,8 +18,9 @@ pkill -9 python
 set -ex
 
 
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-source "${SCRIPT_DIR}/../../scripts/models/qwen2.5-3B.sh"
+MILES_ROOT=/root/miles
+MODEL_ARGS_LINE="$(python3 "${MILES_ROOT}/miles/utils/external_utils/model_args_utils.py" "qwen2.5-3B")" || exit 1
+read -ra MODEL_ARGS <<< "${MODEL_ARGS_LINE}"
 
 CKPT_ARGS=(
    --hf-checkpoint /root/models/Qwen2.5-3B-Instruct/
@@ -124,7 +125,7 @@ ray job submit --address="http://127.0.0.1:8265" \
      "env_vars": {
         "PYTHONPATH": "/root/Megatron-LM",
         "CUDA_DEVICE_MAX_CONNECTIONS": "1",
-        "NCCL_ALGO": "Ring",
+        "NCCL_ALGO": "Ring"
      }
    }' \
    -- python3 train.py \
