@@ -24,6 +24,8 @@ source "${SCRIPT_DIR}/../../scripts/models/qwen2.5-3B.sh"
 CKPT_ARGS=(
    --hf-checkpoint /root/models/Qwen2.5-3B-Instruct/
    --megatron-to-hf-mode bridge
+   --save /root/checkpoints/base/
+   --save-interval 10
 )
 
 ROLLOUT_ARGS=(
