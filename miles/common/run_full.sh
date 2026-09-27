@@ -22,12 +22,12 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "${SCRIPT_DIR}/../../scripts/models/qwen2.5-3B.sh"
 
 CKPT_ARGS=(
-   --hf-checkpoint /root/Qwen2.5-3B-Instruct/
+   --hf-checkpoint /root/models/Qwen2.5-3B-Instruct/
    --megatron-to-hf-mode bridge
 )
 
 ROLLOUT_ARGS=(
-   --prompt-data /root/gsm8k/train.parquet
+   --prompt-data /root/datasets/gsm8k/train.parquet
    --input-key messages
    --label-key label
    --apply-chat-template
@@ -47,7 +47,7 @@ ROLLOUT_ARGS=(
 
 EVAL_ARGS=(
    --eval-interval 10
-   --eval-prompt-data gsm8k /root/gsm8k/test.parquet
+   --eval-prompt-data gsm8k /root/datasets/gsm8k/test.parquet
    --n-samples-per-eval-prompt 1
    --eval-max-response-len 1024
    --eval-top-k 1
