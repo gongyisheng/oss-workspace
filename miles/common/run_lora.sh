@@ -86,7 +86,6 @@ GRPO_ARGS=(
 
 OPTIMIZER_ARGS=(
    --optimizer adam
-   # --lr 1e-6
    --lr 1e-5 # Higher LR often works better for LoRA
    --lr-decay-style constant
    --weight-decay 0.1
