@@ -44,22 +44,19 @@ ROLLOUT_ARGS=(
    --apply-chat-template
    --rollout-shuffle
    --rm-type math
-   # --num-rollout 100
-   --num-rollout 25 # for testing
-   # --rollout-batch-size 32
-   --rollout-batch-size 16 # for testing 
+   --num-rollout 100
+   --rollout-batch-size 32
    --n-samples-per-prompt 8
    --rollout-max-response-len 1024
    --rollout-temperature 1
 
-   # --global-batch-size 256
-   --global-batch-size 32 # for testing
+   --global-batch-size 256
 )
 
 EVAL_ARGS=(
    --eval-interval 10
    --eval-prompt-data gsm8k /root/datasets/gsm8k/test.parquet
-   --n-samples-per-eval-prompt 1
+   --n-samples-per-eval-prompt 4
    --eval-max-response-len 1024
    --eval-top-k 1
 )
