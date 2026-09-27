@@ -49,6 +49,8 @@ ROLLOUT_ARGS=(
    --n-samples-per-prompt 8
    --rollout-max-response-len 1024
    --rollout-temperature 1
+   --over-sampling-batch-size 32
+   --dynamic-sampling-filter-path miles.rollout.filter_hub.dynamic_sampling_filters.check_reward_nonzero_std
 
    --global-batch-size 256
 )
@@ -97,7 +99,7 @@ WANDB_ARGS=(
    --use-wandb
    --wandb-host https://wandb.ai/
    --wandb-project miles-rl-dev
-   --wandb-group qwen2.5-3B-lora
+   --wandb-group qwen2.5-3B-dapo-lora
 )
 
 SGLANG_ARGS=(
