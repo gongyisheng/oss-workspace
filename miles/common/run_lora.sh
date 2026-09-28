@@ -71,8 +71,11 @@ PERF_ARGS=(
    --expert-model-parallel-size 1
    --expert-tensor-parallel-size 1
 
-   --use-dynamic-batch-size
-   --max-tokens-per-gpu 8192
+   # not compatable with fused attn backend
+   # --use-dynamic-batch-size
+   # --max-tokens-per-gpu 8192
+   --qkv-format bshd
+   --micro-batch-size 4
 )
 
 GRPO_ARGS=(
@@ -119,9 +122,8 @@ MISC_ARGS=(
    # should be good for model performance
    --accumulate-allreduce-grads-in-fp32
    --attention-softmax-in-fp32
-   # need to comment this when using model with MLA
    # --attention-backend flash # flash attn, does not work on sm120
-   --attention-backend fused # cudnn backend, works on sm120
+   --attention-backend fused
 )
 
 
