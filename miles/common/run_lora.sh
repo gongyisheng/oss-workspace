@@ -120,7 +120,8 @@ MISC_ARGS=(
    --accumulate-allreduce-grads-in-fp32
    --attention-softmax-in-fp32
    # need to comment this when using model with MLA
-   --attention-backend flash
+   # --attention-backend flash # flash attn, does not work on sm120
+   --attention-backend fused # cudnn backend, works on sm120
 )
 
 
