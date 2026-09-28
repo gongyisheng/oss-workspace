@@ -68,7 +68,7 @@ PERF_ARGS=(
    # --use-dynamic-batch-size
    # --max-tokens-per-gpu 8192
    --qkv-format bshd
-   --micro-batch-size 8
+   --micro-batch-size 2
 )
 
 GRPO_ARGS=(
