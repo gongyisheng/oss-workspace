@@ -26,7 +26,7 @@ CKPT_ARGS=(
    --hf-checkpoint /root/models/Qwen2.5-3B-Instruct/
    # --ref-load /root/models/Qwen2.5-3B-Instruct/
    --megatron-to-hf-mode bridge
-   --save /root/checkpoints/lora/
+   --save /data/lora/
    --save-interval 10
 )
 
@@ -57,6 +57,7 @@ ROLLOUT_ARGS=(
 )
 
 EVAL_ARGS=(
+   # --skip-eval-before-train
    --eval-interval 10
    --eval-prompt-data gsm8k /root/datasets/gsm8k/test.parquet
    --n-samples-per-eval-prompt 4
@@ -75,6 +76,7 @@ PERF_ARGS=(
    --qkv-format thd
    --use-dynamic-batch-size
    --max-tokens-per-gpu 4096
+
    --no-offload-train
 )
 

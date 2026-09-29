@@ -26,7 +26,7 @@ CKPT_ARGS=(
    --hf-checkpoint /root/models/Qwen2.5-3B-Instruct/
    # --ref-load /root/models/Qwen2.5-3B-Instruct/
    --megatron-to-hf-mode bridge
-   --save /root/checkpoints/base/
+   --save /data/base/
    --save-interval 10
 )
 
@@ -49,6 +49,7 @@ ROLLOUT_ARGS=(
 )
 
 EVAL_ARGS=(
+   # --skip-eval-before-train
    --eval-interval 10
    --eval-prompt-data gsm8k /root/datasets/gsm8k/test.parquet
    --n-samples-per-eval-prompt 4
