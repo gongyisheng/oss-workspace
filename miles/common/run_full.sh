@@ -24,7 +24,7 @@ read -ra MODEL_ARGS <<< "${MODEL_ARGS_LINE}"
 
 CKPT_ARGS=(
    --hf-checkpoint /root/models/Qwen2.5-3B-Instruct/
-   --ref-load /root/models/Qwen2.5-3B-Instruct/
+   # --ref-load /root/models/Qwen2.5-3B-Instruct/
    --megatron-to-hf-mode bridge
    --save /root/checkpoints/base/
    --save-interval 10
@@ -67,11 +67,13 @@ PERF_ARGS=(
    --qkv-format thd
    --use-dynamic-batch-size
    --max-tokens-per-gpu 4096
+
+   --no-offload-train
 )
 
 GRPO_ARGS=(
    --advantage-estimator grpo
-   --use-kl-loss
+   # --use-kl-loss # enable with --ref-load
    --kl-loss-coef 0.00
    --kl-loss-type low_var_kl
    --kl-coef 0.00
