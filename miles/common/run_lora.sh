@@ -72,11 +72,9 @@ PERF_ARGS=(
    --expert-model-parallel-size 1
    --expert-tensor-parallel-size 1
 
-   # not compatable with fused attn backend
-   # --use-dynamic-batch-size
-   # --max-tokens-per-gpu 8192
-   --qkv-format bshd
-   --micro-batch-size 8
+   --qkv-format thd
+   --use-dynamic-batch-size
+   --max-tokens-per-gpu 4096
 )
 
 GRPO_ARGS=(
@@ -124,8 +122,7 @@ MISC_ARGS=(
    # should be good for model performance
    --accumulate-allreduce-grads-in-fp32
    --attention-softmax-in-fp32
-   # --attention-backend flash # flash attn, does not work on sm120
-   --attention-backend fused
+   --attention-backend flash
 )
 
 
@@ -137,7 +134,11 @@ ray job submit --address="http://127.0.0.1:8265" \
      "env_vars": {
         "PYTHONPATH": "/root/Megatron-LM",
         "CUDA_DEVICE_MAX_CONNECTIONS": "1",
-        "NCCL_ALGO": "Ring"
+        "NCCL_ALGO": "Ring",
+        "SGLANG_TIMEOUT_KEEP_ALIVE": "60",
+        "NVTE_FLASH_ATTN_V2": "1",
+        "NVTE_FLASH_ATTN_V3": "0",
+        "NVTE_FLASH_ATTN_V4": "0"
      }
    }' \
    -- python3 train.py \
