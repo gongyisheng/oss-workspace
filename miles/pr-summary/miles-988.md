@@ -93,7 +93,7 @@ ref: https://forge.coreweave.com/wandb/gongyisheng/miles-lora-megatron?nw=nwuser
 this should be easy to support but I forget to remove the pp assertion as I develop it as a prove-of-concept implementation, but anyway the community has already supported it later. for multilora, pp>1 still not supported. support it by add a  `_gather_pp_full_adapter()` step. 
 
 ### Chunked Weight Sync
-here for simplicity, we ignores the settings `--update-weight-buffer-size` and accumulates all the lora adapter weights and broadcast them out at once. This may become a problem when full lora adapter weights becomes big and cause CUDAOOMError in the middle of weight sync.
+here for simplicity, we ignores the settings `--update-weight-buffer-size` and accumulates all the lora adapter weights and broadcast them out at once. This may become a problem when full lora adapter weights becomes big and cause *CUDA Out of Memory* in the middle of weight sync.
 
 this is partially fixed in miles v0.1.1 but still at risk of cuda oom:
 
