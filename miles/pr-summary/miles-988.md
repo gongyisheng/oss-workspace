@@ -83,7 +83,7 @@ to use the feature, make sure to run training on multiple gpus or multiple nodes
 
 ## Test
 
-tested on a rtx pro 6000 + rtx 5090 2 node cluster, qwen25-3B + gsm8k lora RL. weight sync time is around 0.5s-1s. further testing is done by radixark team.
+tested on a rtx pro 6000 + rtx 5090 2 node cluster, qwen25-3B + gsm8k lora RL. weight sync time is around 0.5s-1s (should be lower in production since I m using nccl on ethernet). further testing is done by radixark team.
 
 ref: https://forge.coreweave.com/wandb/gongyisheng/miles-lora-megatron?nw=nwuseryishenggong9437
 
