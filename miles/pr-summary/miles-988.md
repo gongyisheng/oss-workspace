@@ -87,13 +87,6 @@ tested on a rtx pro 6000 + rtx 5090 2 node cluster, qwen25-3B + gsm8k lora RL. w
 
 ref: https://forge.coreweave.com/wandb/gongyisheng/miles-lora-megatron?nw=nwuseryishenggong9437
 
-## Downstream impact / feedback
-
-- Requires a SGLang version containing the distributed adapter-loading API from [PR #27268](https://github.com/sgl-project/sglang/pull/27268).
-- Adds single-node/two-GPU and multi-node examples, allowing training and rollout resources to be allocated separately.
-- Follow-up: the multi-node example advertises `p2p`, despite the implementation rejecting it for LoRA; the example should match the supported broadcast configuration.
-- pp>1 is not supported in this pr but is supported now through `_gather_pp_full_adapter()`, multilora pp>1 still not supported
-
 ## Further Improvement
 
 ### Support pp>1
